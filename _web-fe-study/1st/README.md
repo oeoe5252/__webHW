@@ -1,11 +1,3 @@
-# \_\_webHW
-
----
-
-```
-스터디 HW 업로드용
-```
-
 ### 📒 1주차 (210303 ~ 210309)
 
 1. slot, shadow dom 이용하여 custom element 만들기
