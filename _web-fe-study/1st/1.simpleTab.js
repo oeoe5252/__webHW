@@ -10,13 +10,14 @@ class SimpleTab extends HTMLElement {
     }
 
     constructor() {
+
         // HTMLElement
         super(); 
 
-        // shadow root 생성
-        let shadowRoot = this.attachShadow({mode: 'open'});
-        // shadow tree 구성
-        shadowRoot.innerHTML = `
+        // 인스턴스에 shadow root 생성
+        this.attachShadow({mode: 'open'});
+        // 인스턴스 shadow tree 구성
+        this.shadowRoot.innerHTML = `
             <div class="tabs">
                 <slot class="tabsSlot" name="tab"></slot>
             </div>
@@ -27,7 +28,7 @@ class SimpleTab extends HTMLElement {
                 :host {
                     display: block;
                     max-width: 1024px;
-                    background-color: blue;
+                    background: #f5f5f5;
                     padding: 10px;
                     margin: 0 auto;
                 }
