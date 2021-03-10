@@ -1,6 +1,5 @@
 
 class SimpleTab extends HTMLElement {
-    selected_ = null;
 
     constructor() {
         // HTMLElement
@@ -59,31 +58,21 @@ class SimpleTab extends HTMLElement {
             </style>
         `;
     }
-    
-    // selected_ 프로퍼티 사용할때 호출됨 (set 있으니 get도 우선 만들어준것)
-    get selected() {
-        return this.selected_;
-    }
 
-    // selected_ 프로퍼티 변경할때 호출됨 (this.selected = 값변경[idx])
-    set selected(idx) {
-        this.selected_ = idx;
-        this._activeTab(idx);
-
-        this.setAttribute('selected', idx);
-    }
-
-    // DOCUMNET 에 커스텀(가상) 요소가 처음 연결 될때 콜백. 
+    /**
+     * DOCUMNET 에 커스텀(가상) 요소가 처음 연결 될때 콜백. 
+     */
     connectedCallback() {
         this.setAttribute('role', 'tablist');
 
-        // 슬롯 잡기
+        // 쉐도우 슬롯 잡기
         const tabsSlot = this.shadowRoot.querySelector('.tabsSlot');
         const panelsSlot = this.shadowRoot.querySelector('.panelsSlot');
 
-        // 슬롯 내 요소 노드 할당(슬롯 요소조작 하려고)
-        this.tabs = tabsSlot.assignedNodes();
-        this.panels = panelsSlot.assignedNodes();
+        // 해당 슬롯 안으로 들어온 아이들을 통해 조작하기 위해
+        // assigneNodes :: 해당 슬롯에 할당된 노드들을 반환(Array)
+        this.tabs = tabsSlot.assignedNodes(); //[button, button, button]
+        this.panels = panelsSlot.assignedNodes(); //[section, section, section]
 
         // 슬롯 값 세팅
         this.panels.forEach(function(panel){
@@ -93,26 +82,35 @@ class SimpleTab extends HTMLElement {
 
         // 초기 탭 활성화(selected 변환)
         this.selected = this._findFirstSelectedTab() || 0;
+        this._activeTab();
 
-        // 클릭 이벤트 this = this._onTitleClick
+        // 클릭 이벤트 이벤트로 전달받는 this 를 클릭이벤트받은 요소가 아닌, class this를 쓰겠다 
         this._boundOnTitleClick = this._onTitleClick.bind(this);
         tabsSlot.addEventListener('click', this._boundOnTitleClick);
     }
 
-    // DOCUMNET 에서 커스텀(가상) 요소가 연결이 끊어질때 콜백, 걸었던 이벤트 죽이기
+    /**
+     * DOCUMNET 에서 커스텀(가상) 요소가 연결이 끊어질때 콜백, 걸었던 이벤트 죽이기
+     */
     disconnectedCallback() {
         const tabsSlot = this.shadowRoot.querySelector('.tabsSlot');
         tabsSlot.removeEventListener('click', this._boundOnTitleClick);
     }
 
-    // 클릭시 탭 활성화(selected 변환)
+    /**
+     * 클릭시 탭 활성화(selected 변환)
+     */
     _onTitleClick(e) { 
         // 현재 활성화된 타겟의 순서 selected에 반환
         this.selected = this.tabs.indexOf(e.target);
+        this._activeTab();
+
         e.target.focus();
     }
 
-    // html 초기 select 반환(따로 지정안했으면 0으로 설정했음 위에서)
+    /**
+     * html 초기 selected 탐색(따로 지정안했으면 0으로 설정했음 위에서)
+     */
     _findFirstSelectedTab() {
         let selectedIdx;
         this.tabs.forEach(function(tab, i){
@@ -125,16 +123,18 @@ class SimpleTab extends HTMLElement {
         return selectedIdx;
     }
 
-    // 전달받은 활성화할 탭 idx 적용
-    _activeTab(idx = null) {
+    /**
+     * 활성화할 탭
+     */
+    _activeTab() {
         for (let i = 0, tab; tab = this.tabs[i]; ++i) { // tabs만큼 순환함
-            let select = (i === idx);
+            let select = (i === this.selected);
             tab.setAttribute('tabindex', select ? 0 : -1); // 같으면 0 다르면 -1 대입
             tab.setAttribute('aria-selected', select); // 같으면 true, 다르면 false 대입
             this.panels[i].setAttribute('aria-hidden', !select);// 같으면 panel show(hidden-false), 다르면 hidden(hidden-true)
         }
+        this.setAttribute('selected', this.selected);
     }
-
 }
 
 // 위에 정의한 class를 <simple-tabs> 라는 이름으로 커스텀 엘리먼트 생성
