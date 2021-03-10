@@ -13,7 +13,8 @@
    > MDN  
    > [Using_shadow_DOM](https://developer.mozilla.org/ko/docs/Web/Web_Components/Using_shadow_DOM)  
    > [assignedNodes](https://developer.mozilla.org/en-US/docs/Web/API/HTMLSlotElement/assignedNodes)  
-   > [Using_custom_elements](https://developer.mozilla.org/ko/docs/Web/Web_Components/Using_custom_elements)
+   > [Using_custom_elements](https://developer.mozilla.org/ko/docs/Web/Web_Components/Using_custom_elements)  
+   > [custom element's Life cycle](https://developer.mozilla.org/ko/docs/Web/Web_Components/Using_custom_elements)
 
    > JS-INFO  
    > [slot-api : assignedNodes](https://javascript.info/slots-composition#slot-api)

@@ -1,5 +1,13 @@
 
 class SimpleTab extends HTMLElement {
+    /**
+     * Specify observed attributes so that attributeChangedCallback will work
+     * attributeChangedCallback 유발하기 위해 필요 감시하는 애
+     * 
+     */
+    static get observedAttributes() {
+        return ['selected'];
+    }
 
     constructor() {
         // HTMLElement
@@ -60,9 +68,11 @@ class SimpleTab extends HTMLElement {
     }
 
     /**
-     * DOCUMNET 에 커스텀(가상) 요소가 처음 연결 될때 콜백. 
+     * DOCUMNET 에 커스텀(가상) 요소가 처음 연결 될때 콜백.
+     * custom element's Life cycle
      */
     connectedCallback() {
+        console.log("connectedCallback::");
         this.setAttribute('role', 'tablist');
 
         // 쉐도우 슬롯 잡기
@@ -82,7 +92,7 @@ class SimpleTab extends HTMLElement {
 
         // 초기 탭 활성화(selected 변환)
         this.selected = this._findFirstSelectedTab() || 0;
-        this._activeTab();
+        this.setAttribute('selected', this.selected);
 
         // 클릭 이벤트 이벤트로 전달받는 this 를 클릭이벤트받은 요소가 아닌, class this를 쓰겠다 
         this._boundOnTitleClick = this._onTitleClick.bind(this);
@@ -90,7 +100,26 @@ class SimpleTab extends HTMLElement {
     }
 
     /**
+     * Invoked when one of the custom element's attributes is added, removed, or changed.
+     * custom element's  Life cycle
+     * @param name : observedAttributes return 중 바뀐 속성 이름
+     * @param oldVal : observedAttributes 바뀌기 전값 (초기 null)
+     * @param newVal : observedAttributes 바뀐 값
+     */
+    attributeChangedCallback(name, oldVal, newVal) {
+        console.log("attributeChangedCallback::", name, oldVal, newVal);
+
+        for (let i = 0, tab; tab = this.tabs[i]; ++i) { // tabs만큼 순환함
+            let select = (i === this.selected);
+            tab.setAttribute('tabindex', select ? 0 : -1); // 같으면 0 다르면 -1 대입
+            tab.setAttribute('aria-selected', select); // 같으면 true, 다르면 false 대입
+            this.panels[i].setAttribute('aria-hidden', !select);// 같으면 panel show(hidden-false), 다르면 hidden(hidden-true)
+        }
+    }
+    
+    /**
      * DOCUMNET 에서 커스텀(가상) 요소가 연결이 끊어질때 콜백, 걸었던 이벤트 죽이기
+     * custom element's  Life cycle
      */
     disconnectedCallback() {
         const tabsSlot = this.shadowRoot.querySelector('.tabsSlot');
@@ -103,7 +132,7 @@ class SimpleTab extends HTMLElement {
     _onTitleClick(e) { 
         // 현재 활성화된 타겟의 순서 selected에 반환
         this.selected = this.tabs.indexOf(e.target);
-        this._activeTab();
+        this.setAttribute('selected', this.selected);
 
         e.target.focus();
     }
@@ -121,19 +150,6 @@ class SimpleTab extends HTMLElement {
         })
 
         return selectedIdx;
-    }
-
-    /**
-     * 활성화할 탭
-     */
-    _activeTab() {
-        for (let i = 0, tab; tab = this.tabs[i]; ++i) { // tabs만큼 순환함
-            let select = (i === this.selected);
-            tab.setAttribute('tabindex', select ? 0 : -1); // 같으면 0 다르면 -1 대입
-            tab.setAttribute('aria-selected', select); // 같으면 true, 다르면 false 대입
-            this.panels[i].setAttribute('aria-hidden', !select);// 같으면 panel show(hidden-false), 다르면 hidden(hidden-true)
-        }
-        this.setAttribute('selected', this.selected);
     }
 }
 
