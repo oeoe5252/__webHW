@@ -143,6 +143,15 @@
 
 
     <script>
+        /**
+         * [TODO]
+         * 스낵바 액션 옵션
+         * 스낵바 위치 옵션
+         * 스낵바 타이밍 옵션
+         * 문구 등장 순서 재고려
+         * 콘텐츠 복사 언젠간
+         * 스낵바 정리
+         * */
         var contentWrap = new Vue({
             el: '.contents', // vue 객체 만들 엘리먼트 요소 지정
             data: {
@@ -193,23 +202,16 @@
                         clearTimeout(this.snackTimer);
                         console.log('claerTimer', this.snackTimer);
                         // this.visible = false;
+                        
+                        setTimeout(() => {this.snackData.visible = false;}, 300);
                         this.snackData.visible = false;
                     }
                 },
-                endTimer : function (e) {
-                    // this.closedSnackBar();
-                    // console.log('clearTimer');
-                    clearTimeout(this.snackTimer);
-                    console.log('claerTimer', this.snackTimer);
-                    this.visible = false;
-                    
-                },
                 openSnackBar : function (e) {
                     console.log(`::::::::::::::::::::: openSnackBar`);
-                    this.hasTimer();
+                    this.hasTimer(e);
                     this.detectSnackType(e);
-                    this.snackData.visible = false;
-                    this.snackData.visible = true;
+                    setTimeout(()=> {this.snackData.visible = true;}, 300);
 
                     this.setTimer(e);
                 },
@@ -217,9 +219,6 @@
                     this.snackTimer = setTimeout(() => {
                         this.snackData.visible = false;
                     }, 3000);
-                },
-                closedSnackBar : function () {
-                    this.visible = false;
                 },
                 changeMode : function (e) {
                     console.log(`:: changeMode`);
@@ -230,14 +229,11 @@
                     console.log(`:: copyContent`);
                     // 콘텐츠 선택
                     // 클립보드에 저장
+                    // 스낵바 호출
                     this.openSnackBar(e);
                 }
             }
         });
-    
-        // Vue.component('oe-snack-bar', {
-        //     template: '<div class="snack-bar"><div class="inner"><div class="snack-msg">{{snackData.msg}}</div></div></div>'
-        // })
     </script>
 </body>
 </html>
