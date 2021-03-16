@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.snackbar.html</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- vuejs dist -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        .code-box {
+            position: relative;
+        }
+        .code-box .util-box {
+            position:absolute;
+            top: 15px;
+            right: 15px;
+        }
+        .code-box .util-box [class*=btn-] {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            font: 0/0 all;
+            color: transparent;
+            border-radius: 100%;
+            border: none;
+            padding: 0;
+            background-color: transparent;
+            cursor: pointer;
+            transition: all .3s;
+        }
+        .code-box .util-box [class*=btn-]:hover {
+            background-color: #ececec;
+        }
+        .code-box .util-box [class*=btn-] i {
+            color:rgb(72, 72, 72);
+            font-size: 18px;
+            line-height: 30px;
+        }
+
+        .code-box .util-box .btn-mode.dark i{
+
+        }
+        .code-box .util-box .btn-mode.light i{
+
+        }
+
+        .code-box pre {
+            border-radius: 5px;
+            border: 1px solid #ececec;
+            padding: 20px 30px;
+            background-color: rgb(249, 249, 249);
+        }
+        .code-box.light-mode pre {
+            background-color: rgb(249, 249, 249);
+        }
+        .code-box.light-mode .btn-mode i {
+            color:rgb(72, 72, 72);
+        }
+        .code-box.dark-mode .btn-mode i {
+            color:#ececec;
+        }
+        .code-box.dark-mode pre {
+            background-color: #283142;
+            color:#ececec;
+        }
+        .code-box.dark-mode .util-box [class*=btn-]:hover {
+            background-color: #1a2332;
+        }
+        .code-box.dark-mode [class*=btn-] i {
+            color: #eceff1;
+        }
+        .snack-bar-area {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .snack-bar {
+            position: absolute;
+            bottom: 0;
+            background: rgba(9, 9, 9,.8);
+            font-size: 14px;
+            color: #ececec;
+            border-radius: 5px;
+            margin: 20px;
+            transform: translateY(0);
+        }
+        .snack-bar .inner {
+            padding: 10px 20px;
+        }
+
+        .action1-enter-active {
+            transition: transform .3s ease-out, opacity .3s ease-out;
+        }
+        .action1-leave-active  {
+            transition: transform .3s ease-in, opacity .3s ease-in;
+        }
+        .action1-enter,
+        .action1-leave-to {
+            transform: translateY(100px);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="contents">
+        <!-- 액션 없는 버전 -->
+        <section>
+            <div class="code-box" :class="[{'dark-mode':bgDarkMode}]">
+                <div class="util-box">
+                    <button v-if="bgDarkMode" class="btn-mode dark" data-label="darkMode" @click="changeMode">
+                        <i class="material-icons">brightness_6</i>
+                    </button>
+                    <button v-else class="btn-mode light" data-label="lightMode" @click="changeMode">
+                        <i class="material-icons">brightness_6</i>
+                    </button>
+                    <button class="btn-copy" data-label="copyContent" @click="copyContent">copy<i class="material-icons">content_copy</i></button>
+                </div>
+                <pre><code>텍스트 복사</code></pre>
+            </div>
+        </section>
+    
+        <!-- 스낵바 템플릿 -->
+        <!-- 
+            트랜지션으로 등장하고
+            3초 있다가
+            트랜지션으로 아웃
+         -->
+        <transition name="action1">
+            <!-- <div class="snack-bar-area" v-show="visible"> -->
+            <div class="snack-bar-area" v-show="snackData.visible">
+                <div class="snack-bar">
+                    <div class="inner">
+                        <div class="snack-msg">{{snackData.msg}}</div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+    <script>
+        var contentWrap = new Vue({
+            el: '.contents', // vue 객체 만들 엘리먼트 요소 지정
+            data: {
+                // 데이터변수 : 정의,
+                snackTimer : '',
+                visible : false,
+                bgDarkMode : false,
+                snackType : '',
+                snackData : '',
+                snackArray : [
+                    {
+                        type : 'copyContent',
+                        msg : 'Contents copied to your clipboard',
+                        visible : false
+                    },
+                    {
+                        type : 'darkMode',
+                        msg : 'Changed up light mode',
+                        visible : false
+                    },
+                    {
+                        type : 'lightMode',
+                        msg : 'Changed up dark mode',
+                        visible : false
+                    },
+                    {
+                        type : 'tmpVisibleTest',
+                        msg : 'tmpVisibleTest',
+                        visible : false
+                    }
+                ],
+            },
+            methods: {
+                // 함수명 : function (인자1) { 
+                    // 기능구현
+                    // n초 뒤에 this.snackData.visible = false; 로 변환
+                // },
+                detectSnackType : function (e) {
+                    this.snackType = e.currentTarget.dataset.label;
+                    this.snackData = this.snackArray.find((item)=>{
+                        return item.type == this.snackType;
+                    });
+                },
+                hasTimer : function (e) {
+                    // if (this.visible) {
+                    if (this.snackData.visible) {
+                        // this.endTimer();
+                        clearTimeout(this.snackTimer);
+                        console.log('claerTimer', this.snackTimer);
+                        // this.visible = false;
+                        this.snackData.visible = false;
+                    }
+                },
+                endTimer : function (e) {
+                    // this.closedSnackBar();
+                    // console.log('clearTimer');
+                    clearTimeout(this.snackTimer);
+                    console.log('claerTimer', this.snackTimer);
+                    this.visible = false;
+                    
+                },
+                openSnackBar : function (e) {
+                    console.log(`::::::::::::::::::::: openSnackBar`);
+                    this.hasTimer();
+                    this.detectSnackType(e);
+                    this.snackData.visible = false;
+                    this.snackData.visible = true;
+
+                    this.setTimer(e);
+                },
+                setTimer : function (e) {
+                    this.snackTimer = setTimeout(() => {
+                        this.snackData.visible = false;
+                    }, 3000);
+                },
+                closedSnackBar : function () {
+                    this.visible = false;
+                },
+                changeMode : function (e) {
+                    console.log(`:: changeMode`);
+                    this.bgDarkMode = !this.bgDarkMode;
+                    this.openSnackBar(e);
+                },
+                copyContent : function (e) {
+                    console.log(`:: copyContent`);
+                    // 콘텐츠 선택
+                    // 클립보드에 저장
+                    this.openSnackBar(e);
+                }
+            }
+        });
+    
+        // Vue.component('oe-snack-bar', {
+        //     template: '<div class="snack-bar"><div class="inner"><div class="snack-msg">{{snackData.msg}}</div></div></div>'
+        // })
+    </script>
+</body>
+</html>
