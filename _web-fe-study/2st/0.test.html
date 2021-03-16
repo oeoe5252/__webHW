@@ -39,6 +39,14 @@
             font-size: 18px;
             line-height: 30px;
         }
+        
+        .code-box .util-box .btn-mode.dark i{
+
+        }
+        .code-box .util-box .btn-mode.light i{
+
+        }
+
         .code-box pre {
             border-radius: 5px;
             border: 1px solid #ececec;
@@ -69,18 +77,6 @@
             left: 0;
             right: 0;
             bottom: 0;
-        }
-        .snack-bar-area.left {
-            display: flex;
-            justify-content: flex-start;
-        }
-        .snack-bar-area.right {
-            display: flex;
-            justify-content: flex-end;
-        }
-        .snack-bar-area.center {
-            display: flex;
-            justify-content: center;
         }
         .snack-bar {
             position: absolute;
@@ -113,6 +109,7 @@
         .snack-bar .inner {
             padding: 10px 20px;
         }
+
         .action1-enter-active {
             transition: transform .3s ease-out, opacity .3s ease-out;
         }
@@ -128,6 +125,7 @@
 </head>
 <body>
     <div class="contents">
+        <!-- 액션 없는 버전 -->
         <section>
             <div class="code-box" :class="[{'dark-mode':bgDarkMode}]">
                 <div class="util-box">
@@ -139,13 +137,19 @@
                     </button>
                     <button class="btn-copy" data-label="copyContent" @click="copyContent">copy<i class="material-icons">content_copy</i></button>
                 </div>
-                <pre><code>텍스트 복사 하고 싶네</code></pre>
+                <pre><code>텍스트 복사</code></pre>
             </div>
         </section>
     
-        <!-- 스낵바 -->
+        <!-- 스낵바 템플릿 -->
+        <!-- 
+            트랜지션으로 등장하고
+            3초 있다가
+            트랜지션으로 아웃
+         -->
         <transition name="action1">
-            <div class="snack-bar-area" :class="snackData.position" v-show="snackData.visible">
+            <!-- <div class="snack-bar-area" v-show="visible"> -->
+            <div class="snack-bar-area" v-show="snackData.visible">
                 <div class="snack-bar">
                     <div class="inner">
                         <div class="snack-msg">{{snackData.msg}}</div>
@@ -154,15 +158,18 @@
                 </div>
             </div>
         </transition>
+        </div>
     </div>
+
 
     <script>
         /**
          * [TODO]
+         * 스낵바 위치 옵션
+         * 스낵바 타이밍 옵션
          * 문구 등장 순서 재고려
          * 콘텐츠 복사 언젠간
          * 스낵바 정리
-         * 임시 스타일 작성 정리
          * */
         var contentWrap = new Vue({
             el: '.contents', // vue 객체 만들 엘리먼트 요소 지정
@@ -177,22 +184,25 @@
                         type : 'copyContent',
                         msg : 'Contents copied to your clipboard',
                         visible : false,
-                        action : false,
-                        position: 'center'
+                        action : false
                     },
                     {
                         type : 'darkMode',
                         msg : 'Changed up light mode',
                         visible : false,
-                        action : true,
-                        position: 'left'
+                        action : true
                     },
                     {
                         type : 'lightMode',
                         msg : 'Changed up dark mode',
                         visible : false,
-                        action : true,
-                        position: 'right'
+                        action : true
+                    },
+                    {
+                        type : 'tmpVisibleTest',
+                        msg : 'tmpVisibleTest',
+                        visible : false,
+                        action: false
                     }
                 ],
             },
@@ -207,6 +217,7 @@
                     });
                 },
                 hasTimer : function (e) {
+                    // if (this.visible) {
                     if (this.snackData.visible) {
                         clearTimeout(this.snackTimer);
                         // 퇴장 0.n초 지연
@@ -214,6 +225,7 @@
                     }
                 },
                 openSnackBar : function (e) {
+                    console.log(`::::::::::::::::::::: openSnackBar`);
                     this.hasTimer(e);
                     this.detectSnackType(e);
                     // 등장 0.n초 지연
@@ -228,14 +240,17 @@
                 },
                 closeSnackBar : function (e) {
                     setTimeout(() => { this.snackData.visible = false; }, 300);
-                    // 얘를 없애면 순간 딸깍 거리고, 살리면 지연시간만큼 이동함 setTimeout에 썼는데 왜 또 써야 원하는대로 작동하지?
+                    // 얘를 없애면 순간 딸깍 거리고, 살리면 지연시간만큼 이동함
+                    // setTimeout에 썼는데 왜 또 써야 원하는대로 작동하지?
                     this.snackData.visible = false;
                 },
                 changeMode : function (e) {
+                    console.log(`:: changeMode`);
                     this.bgDarkMode = !this.bgDarkMode;
                     this.openSnackBar(e);
                 },
                 copyContent : function (e) {
+                    console.log(`:: copyContent`);
                     // 콘텐츠 선택
                     // 클립보드에 저장
                     // 스낵바 호출
