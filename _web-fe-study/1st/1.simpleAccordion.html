@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1st Accordion</title>
+  <style>
+    html, body, h1, h2, h3, h4, h5, h6, div, p, ul {margin: 0; padding: 0;}
+    body,input,button,select,textarea,label{font-size:16px;color:#000;font-family:'Roboto',sans-serif;font-weight:400;}
+    ul {list-style: none;}
+    a {display: block; text-decoration: none;}
+    *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;outline:none}
+    button {border: 0 none; background-color: transparent; cursor: pointer;}
+    input {appearance:none;-moz-appearance:none;-webkit-appearance:none;}
+
+    i {
+        font-style: normal;
+    }
+    .content-wrap  {
+        width: 1080px;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .content-wrap h3 {
+        background-color: #eee;
+        text-align: center;
+    }
+
+    .faq-wrap {
+        border-top: 2px solid rgba(0,0,0,.1);
+        border-bottom: 2px solid rgba(0,0,0,.1);
+    }
+    .faq-wrap .item {
+        overflow: hidden;
+    }
+
+    .faq-wrap .item:not(first-child) {
+        border-bottom: 1px solid rgba(0,0,0,.1);
+    }
+
+    .faq-wrap .item .item-tit {
+        display: flex;
+        position: relative;
+        align-items: center;
+        cursor: pointer;
+        padding: 15px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .faq-wrap .item .item-tit .tit {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .faq-wrap .item .item-tit .ico-num {
+        align-self: flex-start;
+        font-size: 30px;
+        font-weight: bold;
+        line-height: 1;
+        margin-right: 15px;
+    }
+    .faq-wrap .item .item-tit .ico-arr {
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        top: 20px;
+        right: 15px;
+        border-right: 2px solid #000;
+        border-bottom: 2px solid #000;
+        font: 0/0 all;
+        color: transparent;
+        transform: rotate(45deg);
+    }
+
+    .faq-wrap .item .item-info {
+        height: 0px;
+        background-color: rgb(247,247,247);
+        padding: 0px;
+        transition: height 0.5s, padding 0.5s;
+    }
+
+    /* 활성 스타일 */
+    .faq-wrap .item.active .item-info {
+        height: 250px;
+        padding: 20px; 
+        transition: height 0.5s, padding 0.5s;
+    }
+
+    .faq-wrap .item.active .item-tit .ico-arr {
+        transition: height 0.5s, padding 0.5s;
+        transform: translateY(5px) rotate(-135deg);
+    }
+</style>
+</head>
+<body>
+  <section class="content-wrap">
+      <h3>아코디언</h3>
+      <ul class="faq-wrap">
+          <li class="item active">
+              <div class="item-tit">
+                  <i class="ico-num">01.</i>
+                  <span class="tit">당신은 지금 무얼 하고 있나요?<br>두 줄일 경우 어떻게 표시되나요?</span>
+                  <i class="ico-arr">icon</i>
+              </div>
+              <div class="item-info">내용</div>
+          </li>
+          <li class="item">
+              <div class="item-tit">
+                  <i class="ico-num">02.</i>
+                  <span class="tit">상품 설명서 및 이용약관 안내</span>
+                  <i class="ico-arr">icon</i>
+              </div>
+              <div class="item-info">내용</div>
+          </li>
+          <li class="item">
+              <div class="item-tit">
+                  <i class="ico-num">03.</i>
+                  <span class="tit">고유식별 정보처리 동의</span>
+                  <i class="ico-arr">icon</i>
+              </div>
+              <div class="item-info">내용</div>
+          </li>
+      </ul>
+
+      <!-- <ul class="faq-wrap">
+          <faq-item>
+              <slot slot="ico-num">01.</slot>
+              <slot slot="tit">당신은 지금 무얼 하고 있나요?<br>두 줄일 경우 어떻게 표시되나요?</slot>
+              <slot slot="info">
+                  <ul>
+                      <li>리스트1</li>
+                      <li>리스트2</li>
+                      <li>리스트3</li>
+                  </ul>
+              </slot>
+          </faq-item>
+          <faq-item>
+              <slot slot="ico-num">02.</slot>
+              <slot slot="tit">상품 설명서 및 이용약관 안내</slot>
+              <slot slot="info">
+                  일반내용
+              </slot>
+          </faq-item>
+          <faq-item>
+              <slot slot="ico-num">03.</slot>
+              <slot slot="tit">고유식별 정보처리 동의</slot>
+              <slot slot="info">
+                  이미지
+              </slot>
+          </faq-item>
+      </ul> -->
+  </section>
+  
+  <simple-accordion>
+    <button slot="tab">Tab 1</button>
+    <button slot="tab">Tab 2</button>
+
+    <section slot="panel">content panel 1</section>
+    <section slot="panel">
+      <h2>content panel 2</h2>
+      <ul>
+        <li>ddd</li>
+      </ul>
+    </section>
+  </simple-accordion>
+
+  <!-- slot.assignedNodes 때문에 마크업 랜더링 다 된 후 스크립트 불러야함 -->
+  <script src="./1.simpleAccordion.js"></script>
+</body>
+</html>
+
+  
