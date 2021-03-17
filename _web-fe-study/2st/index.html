@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.snackbar.html</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- vuejs dist -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        .code-box {
+            position: relative;
+        }
+        .code-box .util-box {
+            position:absolute;
+            top: 15px;
+            right: 15px;
+        }
+        .code-box .util-box [class*=btn-] {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            font: 0/0 all;
+            color: transparent;
+            border-radius: 100%;
+            border: none;
+            padding: 0;
+            background-color: transparent;
+            cursor: pointer;
+            transition: all .3s;
+        }
+        .code-box .util-box [class*=btn-]:hover {
+            background-color: #ececec;
+        }
+        .code-box .util-box [class*=btn-] i {
+            color:rgb(72, 72, 72);
+            font-size: 18px;
+            line-height: 30px;
+        }
+        .code-box pre {
+            border-radius: 5px;
+            border: 1px solid #ececec;
+            padding: 20px 30px;
+            background-color: rgb(249, 249, 249);
+        }
+        .code-box.light-mode pre {
+            background-color: rgb(249, 249, 249);
+        }
+        .code-box.light-mode .btn-mode i {
+            color:rgb(72, 72, 72);
+        }
+        .code-box.dark-mode .btn-mode i {
+            color:#ececec;
+        }
+        .code-box.dark-mode pre {
+            background-color: #283142;
+            color:#ececec;
+        }
+        .code-box.dark-mode .util-box [class*=btn-]:hover {
+            background-color: #1a2332;
+        }
+        .code-box.dark-mode [class*=btn-] i {
+            color: #eceff1;
+        }
+        .snack-bar-area {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .snack-bar-area.left {
+            display: flex;
+            justify-content: flex-start;
+        }
+        .snack-bar-area.right {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .snack-bar-area.center {
+            display: flex;
+            justify-content: center;
+        }
+        .snack-bar {
+            position: absolute;
+            bottom: 0;
+            background: rgba(9, 9, 9,.8);
+            font-size: 14px;
+            color: #ececec;
+            border-radius: 5px;
+            margin: 20px;
+            transform: translateY(0);
+        }
+        .snack-bar .inner {
+            display: flex;
+            justify-content: space-between;
+        }
+        .snack-bar .btn-close {
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            margin-left: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .snack-bar .btn-close i {
+            line-height: 20px;
+            font-size: 18px;
+            color: rgba(255,255,255,.8);
+        }
+        .snack-bar .inner {
+            padding: 10px 20px;
+        }
+        .action1-enter-active {
+            transition: transform .3s ease-out, opacity .3s ease-out;
+        }
+        .action1-leave-active  {
+            transition: transform .3s ease-in, opacity .3s ease-in;
+        }
+        .action1-enter,
+        .action1-leave-to {
+            transform: translateY(100px);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="contents">
+        <section>
+            <div class="code-box" :class="[{'dark-mode':bgDarkMode}]">
+                <div class="util-box">
+                    <button v-if="bgDarkMode" class="btn-mode dark" data-label="darkMode" @click="changeMode">
+                        <i class="material-icons">brightness_6</i>
+                    </button>
+                    <button v-else class="btn-mode light" data-label="lightMode" @click="changeMode">
+                        <i class="material-icons">brightness_6</i>
+                    </button>
+                    <button class="btn-copy" data-label="copyContent" @click="copyContent">copy<i class="material-icons">content_copy</i></button>
+                </div>
+                <pre><code>텍스트 복사 하고 싶네</code></pre>
+            </div>
+        </section>
+    
+        <!-- 스낵바 -->
+        <transition name="action1">
+            <div class="snack-bar-area" :class="snackData.position" v-show="snackData.visible">
+                <div class="snack-bar">
+                    <div class="inner">
+                        <div class="snack-msg">{{snackData.msg}}</div>
+                        <button v-if="snackData.action" class="btn-close" @click="closeSnackBar"><i class="material-icons">clear</i></button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+        /**
+         * [TODO]
+         * 지연시간, 노출시간 조정해보기
+         * 문구 등장 순서 재고려
+         * 콘텐츠 복사 언젠간
+         * 스낵바 정리
+         * 임시 스타일 작성 정리
+         * */
+        var contentWrap = new Vue({
+            el: '.contents', // vue 객체 만들 엘리먼트 요소 지정
+            data: {
+                // 데이터변수 : 정의,
+                snackTimer : '',
+                bgDarkMode : false,
+                snackType : '',
+                snackData : '',
+                snackArray : [
+                    {
+                        type : 'copyContent',
+                        msg : 'Contents copied to your clipboard',
+                        visible : false,
+                        action : false,
+                        position: 'center'
+                    },
+                    {
+                        type : 'darkMode',
+                        msg : 'Changed up light mode',
+                        visible : false,
+                        action : true,
+                        position: 'left'
+                    },
+                    {
+                        type : 'lightMode',
+                        msg : 'Changed up dark mode',
+                        visible : false,
+                        action : true,
+                        position: 'right'
+                    }
+                ],
+            },
+            methods: {
+                // 함수명 : function (인자1) { 
+                    // 기능구현
+                // },
+                detectSnackType : function (e) {
+                    this.snackType = e.currentTarget.dataset.label;
+                    this.snackData = this.snackArray.find((item)=>{
+                        return item.type == this.snackType;
+                    });
+                },
+                hasTimer : function (e) {
+                    if (this.snackData.visible) {
+                        clearTimeout(this.snackTimer);
+                        // 퇴장 0.n초 지연
+                        this.closeSnackBar();
+                    }
+                },
+                openSnackBar : function (e) {
+                    this.hasTimer(e);
+                    this.detectSnackType(e);
+                    // 등장 0.n초 지연
+                    setTimeout(()=> {this.snackData.visible = true;}, 300);
+                    // n초 설정
+                    this.setTimer(e);
+                },
+                setTimer : function (e) {
+                    this.snackTimer = setTimeout(() => { 
+                        this.snackData.visible = false; 
+                    }, 3000);
+                },
+                closeSnackBar : function (e) {
+                    setTimeout(() => { this.snackData.visible = false; }, 300);
+                    // 얘를 없애면 순간 딸깍 거리고, 살리면 지연시간만큼 이동함 setTimeout에 썼는데 왜 또 써야 원하는대로 작동하지?
+                    this.snackData.visible = false;
+                },
+                changeMode : function (e) {
+                    this.bgDarkMode = !this.bgDarkMode;
+                    this.openSnackBar(e);
+                },
+                copyContent : function (e) {
+                    // 콘텐츠 선택
+                    // 클립보드에 저장
+                    // 스낵바 호출
+                    this.openSnackBar(e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
