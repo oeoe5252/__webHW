@@ -1,28 +1,21 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="app">
+    <!-- [NOTE]
+    - 라우터로 기본 설정한 view를 router-view 영역에 대체해서 보여줌 설정한게 없으면, 대체되는게 없으니 암것도 암보여짐 .app 만 보이겟지?
+    - 감싸는애 class 지정해준건 임의로 영역 구분해서 보기 위해서 지은것.
+    -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
   components: {
-    HelloWorld
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  // @import "@/assets/scss/_mixins.scss";
 </style>
