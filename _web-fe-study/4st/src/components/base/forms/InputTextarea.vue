@@ -10,8 +10,9 @@
         :id="id"
         :name="name"
         :placeholder="placeholder"
-        :readonly="readonly"/>
-
+        :readonly="readonly"
+        @input="onInputUpdate"/>
+    <p> <span>{{tmpValue.length}}</span> /1000</p>
     <!-- [TODO]
         - 에러문구 컨포넌트화
         - 에러문구 스타일
@@ -23,6 +24,12 @@
 <script>
 export default {
     name: 'InputTextarea',
+    data() {
+        return {
+            cntText: 0,
+            tmpValue: ''
+        }
+    },
     props: {
         id: {
             type: String,
@@ -61,6 +68,16 @@ export default {
                 default:
                     return false;
             }
+        },
+        onInputUpdate: function(e) {
+            // this.value = e.target.value
+            console.log(e.target.value, e.target.value.length);
+            console.log("this.value", this.value)
+            // 자식에서 입력된 값을 부모 이벤트로 보냄
+            // this.checkRules(value)
+            // this.cntText = e.target.value.length
+            this.tmpValue = e.target.value;
+            this.$emit('input', e.target.value);
         }
     },
 }
