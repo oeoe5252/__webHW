@@ -24,6 +24,7 @@ export default {
     line-height: 2;
     background: #fff;
     padding: 0 1.5rem;
+    z-index: 1;
   }
       // 스타일 가이드 스타일 테스트
     // guide-type-line : 선으로 디자인

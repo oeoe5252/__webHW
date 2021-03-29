@@ -18,7 +18,7 @@
 </template>
 <script>
 export default {
-    name: 'InputRadio',
+    name: 'InputCheck',
     props: {
         id: {
             type: String,
@@ -54,14 +54,14 @@ export default {
 }
 </script>
 <style lang="scss">
-  // [radio]
+  // [check]
 
-.input-radio {
+.input-checkbox {
     .label-legend {
         position: relative;
         font-size: 1.6rem;
     }
-    
+    // 스퀘어 스타일
     &.type1 {
         .label-legend {
             line-height: 2.4rem;
@@ -71,7 +71,6 @@ export default {
                 @include pseudoBase();
                 top: 0;
                 bottom: 0;
-                border-radius: 50%;
                 margin: auto;
             }
             &:before {
@@ -85,6 +84,45 @@ export default {
         :checked + label {
             &:before {
                 border: 7px solid $mainColor01;
+            }
+        }
+    }
+    // 체크 스타일
+    &.type2 {
+        .label-legend {
+            line-height: 2.4rem;
+            padding-left: 3rem;
+            margin-bottom: 0.5em;
+            &:before,
+            &:after {
+                @include pseudoBase();
+                top: 0;
+                bottom: 0;
+                margin: auto;
+            }
+            &:before {
+                @include itemSize(24px, 24px);
+                left: 0;
+                background-color: $white;
+                border: 1px solid $grayC;
+                transition: all .15s;
+            }
+            &:after {
+                @include itemSize(16px, 9px);
+                top: -5px;
+                left: 4px;
+                border-left: 2.5px solid $white;
+                border-bottom: 2.5px solid $white;
+                border-color: $white;
+                transform: rotate(315deg);
+            }
+        }
+        :checked + label {
+            &:before {
+                background-color: $mainColor01;
+            }
+            &:after {
+                border-color: $white;
             }
         }
     }

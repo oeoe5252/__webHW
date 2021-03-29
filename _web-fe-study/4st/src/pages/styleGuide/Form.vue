@@ -47,9 +47,15 @@
       <guide-sub-title class="mt15 mb40">radio</guide-sub-title>
       - 에러문구는 그룹 묶어서 그룹에서 한번만
       - 선택은 하나만 있지 않으니 그룹안에 input-radio 컴포넌트 필요할듯(그 그룹에서 error 컴포넌트 사용하게끔) (필수 여부)
+      - type1: 기본 닷 스타일(def)
 
       <guide-sub-title class="mt15 mb40">checkbox</guide-sub-title>
-      
+      - 에러문구는 그룹 묶어서 그룹에서 한번만
+      - 선택은 하나만 있지 않으니 그룹안에 input-radio 컴포넌트 필요할듯(그 그룹에서 error 컴포넌트 사용하게끔) (필수 여부)
+      - type1: 기본 스퀘어 스타일(def)
+      - type2: 체크 스타일
+      - type3: 체크 스타일2
+
       <guide-sub-title class="mt15 mb40">select</guide-sub-title>
 
       <guide-sub-title class="mt15 mb40">textarea</guide-sub-title>
