@@ -10,6 +10,7 @@
       - type1 : 라벨 스타일1
       - type2 : 라벨 스타일2
       - type3 : 라벨 스타일3 
+      - readonly 스타일 그러고보니 안만들었네 ㅎㅎ
 
       <guide-sub-title class="mt15 mb40">
         input
