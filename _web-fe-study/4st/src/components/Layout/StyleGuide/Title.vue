@@ -20,9 +20,11 @@ export default {
     top: 0;
     font-size: 3rem;
     font-weight: 800;
-    text-transform: uppercase;
     line-height: 2;
-    background: #fff;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.5);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
     padding: 0 1.5rem;
     z-index: 1;
   }

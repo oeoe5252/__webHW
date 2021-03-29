@@ -6,15 +6,15 @@
         :for="id"
         class="label-legend"><slot /></label>
 
-    <input 
+    <textarea 
         :id="id"
         :name="name"
-        :type="inputType"
         :placeholder="placeholder"
         :readonly="readonly"/>
 
     <!-- [TODO]
         - 에러문구 컨포넌트화
+        - 에러문구 스타일
         - 에러문구 등장효과
      -->
     <p class="error"><i></i>에러문구 올 예정</p>
@@ -22,7 +22,7 @@
 </template>
 <script>
 export default {
-    name: 'InputPassword',
+    name: 'InputTextarea',
     props: {
         id: {
             type: String,
@@ -38,7 +38,7 @@ export default {
         },
         styleType: {
             type: String,
-            default: null
+            default: 'type1'
         },
         className: {
             type: String,
@@ -46,7 +46,7 @@ export default {
         },
         placeholder: {
             type: String,
-            default: '비밀번호를 입력해주세요'
+            default: '텍스트를 입력해주세요'
         },
         readonly: {
             type: Boolean,
@@ -66,10 +66,23 @@ export default {
 }
 </script>
 <style lang="scss">
-.input-password {
+.input-textarea {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
+    textarea {
+        min-height: 100px;
+        font-size: 1.6rem;
+        border: 1px solid rgb(221, 221, 221);
+        padding: 1.5rem;
+        line-height: 1.2;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar{
+            display:none;
+        }
+    }
 
     .label-legend {
         font-size: 1.6rem;
@@ -87,10 +100,11 @@ export default {
         .label-legend {
             // justify 이것저것 다 했는데 왜 적용 왜 안돼..
             width: 100px;
+            align-self: flex-start;
             text-align: right;
             padding-right: 1.5rem;
         }
-        input {
+        textarea {
             width: calc(100% - 100px);
         }
         .error {

@@ -15,7 +15,7 @@
         input
         <guide-sub-desc>password</guide-sub-desc>
       </guide-sub-title>
-      (text랑 스타일 동일, type만 다름)
+      (text랑 스타일 동일, type만 다름, 바인딩ㄴ, 유령...: 우선 text 그냥 씀)
       - type1 : 라벨 스타일1
       - type2 : 라벨 스타일2
       - type3 : 라벨 스타일3 
@@ -24,7 +24,7 @@
         input
         <guide-sub-desc>email</guide-sub-desc>
       </guide-sub-title>
-      (text랑 스타일 동일, type만 다름)
+      (text랑 스타일 동일, type만 다름, 바인딩ㄴ, 유령...: 우선 text 그냥 씀)
       - type1 : 라벨 스타일1
       - type2 : 라벨 스타일2
       - type3 : 라벨 스타일3 
@@ -48,6 +48,7 @@
       - 에러문구는 그룹 묶어서 그룹에서 한번만
       - 선택은 하나만 있지 않으니 그룹안에 input-radio 컴포넌트 필요할듯(그 그룹에서 error 컴포넌트 사용하게끔) (필수 여부)
       - type1: 기본 닷 스타일(def)
+      - type2: 박스 스타일
 
       <guide-sub-title class="mt15 mb40">checkbox</guide-sub-title>
       - 에러문구는 그룹 묶어서 그룹에서 한번만
@@ -56,9 +57,10 @@
       - type2: 체크 스타일
       - type3: 체크 스타일2
 
-      <guide-sub-title class="mt15 mb40">select</guide-sub-title>
-
       <guide-sub-title class="mt15 mb40">textarea</guide-sub-title>
+      - [TODO] 최대글자 입력 카운트 노출
+
+      <guide-sub-title class="mt15 mb40">select</guide-sub-title>
 
   </guide-layout>
 </template>
