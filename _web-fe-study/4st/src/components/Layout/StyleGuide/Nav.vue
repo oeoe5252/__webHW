@@ -1,5 +1,5 @@
 <template>
-  <nav class="guide-nav line-type">
+  <nav class="guide-nav">
     <h1>
       <router-link to="/styleGuide">GuideMain</router-link>
     </h1>
@@ -51,18 +51,18 @@ export default {
         display: block;
       }
     }
-
+  }
     // 스타일 가이드 스타일 테스트
-    // line-type : 선으로 디자인
-    &.line-type {
-      border-right: 3px solid $black;
+    // guide-type-line : 선으로 디자인
+ .guide-type-line {
+   .guide-nav {
+     border-right: 3px solid $black;
       h1 {
         font-family: Montserrat;
       }
       li{
         border-top: 3px solid $black;
       }
-    }
-
-  }
+   }
+ }
 </style>

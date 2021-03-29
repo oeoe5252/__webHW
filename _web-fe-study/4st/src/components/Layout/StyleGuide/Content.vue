@@ -1,6 +1,6 @@
 <template>
   <div class="guide-content">
-    <slot /> 
+    <slot />
   </div>
 </template>
 
@@ -16,7 +16,8 @@ export default {
 
 <style lang="scss">
   .guide-content {
+    position: relative;
     margin-left: 25rem;
-    padding-left: 1.5rem;
+    padding: 0 1.5rem;
   }
 </style>

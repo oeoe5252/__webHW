@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div class="index guide-type-line">
     <!-- guide-layout
     - navigation 과, 콘텐츠 영역만 분리한 것
      -->
