@@ -41,6 +41,19 @@
         className="mt15" 
         placeholder="메일을 입력해봐 한번">이메일 {{guideRequest.email}}</input-text>
 
+      <guide-sub-title class="mt15">textarea</guide-sub-title>
+      <!-- [TODO] 본 input type엔 textarea 없지만 그냥 이름 짓기 구찮아서 넣어준것... -->
+      <input-textarea
+        v-model="guideRequest.textarea"
+        :rules="rules.textarea"
+        id="g-txtarea"
+        name="g-txtarea"
+        inputType="textarea"
+        styleType="type1"
+        className="mt15">
+        텍스트영역
+      </input-textarea>
+
       <guide-sub-title class="mt15">radio</guide-sub-title>
       <div class="g-wrap">
         <!-- [TODO] 체크 기본 설정 옵션 아직 작업 안함 -->
@@ -94,16 +107,7 @@
         <p class="error"><i></i>에러문구 올 예정</p>
       </div>
 
-      <guide-sub-title class="mt15">textarea</guide-sub-title>
-      <!-- [TODO] 본 input type엔 textarea 없지만 그냥 이름 짓기 구찮아서 넣어준것... -->
-      <input-textarea
-        id="g-txtarea"
-        name="g-txtarea"
-        inputType="textarea"
-        styleType="type1"
-        className="mt15">
-        텍스트영역
-      </input-textarea>
+
   </guide-layout>
 </template>
 
@@ -129,10 +133,12 @@ export default {
   },
   data: () => ({
     // v-model 감시값
+    // 데이터 넘길 값
     guideRequest : {
       text: '',
       email: '',
       gender: '',
+      textarea: ''
     },
     // vuetify 복붙 : vuetify에 안적혀있었음 생각도 못했을거
     // 에러는 무진장 뜨네 멋모르고 막하니깐(루프 오류 제일심각)
@@ -140,6 +146,7 @@ export default {
     // (인수) => return
     // [arrFunc, arrFunc, arrFun ......]
     // 값이 바뀔때마다 해당 rulse 들 순환해줘야함.
+    // add them as functions returning true/error message.
     rules: {
       // 처음에도 노출되는건, v-model에서 첫 값이 undefined 이거나 null 이니깐 그런건가보다(?)
       text: [
@@ -158,6 +165,9 @@ export default {
           return pattern.test(value) || 'Invalid e-mail.'
         }
       ],
+      textarea: [
+        value => (value || '').length <= 10 || 'Text must be less than 10 characters',
+      ]
     }
   }),
 }

@@ -12,13 +12,14 @@
         :placeholder="placeholder"
         :readonly="readonly"
         @input="onInputUpdate"/>
-    <p> <span>{{tmpValue.length}}</span> /1000</p>
+    <p><span>{{tmpValue.length}}</span> /10</p>
     <!-- [TODO]
         - 에러문구 컨포넌트화
         - 에러문구 스타일
         - 에러문구 등장효과
      -->
-    <p class="error"><i></i>에러문구 올 예정</p>
+    <!-- printErrMsg 가 렌더링 되어야지 실행이 된다. 그래서 v-if로 못했는데 v-if로 하는 방법이 분명 있겠지.... -->
+    <p v-show="this.tmpErrMsg" class="error"><i></i>{{printErrMsg(rules)}}</p>
   </div>
 </template>
 <script>
@@ -27,7 +28,8 @@ export default {
     data() {
         return {
             cntText: 0,
-            tmpValue: ''
+            tmpValue: '',
+            tmpErrMsg: null
         }
     },
     props: {
@@ -58,6 +60,12 @@ export default {
         readonly: {
             type: Boolean,
             default: false
+        },
+        value: {
+            type: String,
+        },
+        rules: {
+            type: Array,
         }
     },
     methods: {
@@ -78,8 +86,29 @@ export default {
             // this.cntText = e.target.value.length
             this.tmpValue = e.target.value;
             this.$emit('input', e.target.value);
+            // this.printErrMsg(this.rules);
+        },
+        checkRules: function() {
+            console.log(this.rules);
+
+            let tmpValue = this.value;
+
+            let tmpResult = this.rules.map(function(elem) {
+                console.log("foreach", elem(tmpValue), typeof(elem(tmpValue)));
+                return elem(tmpValue);
+                // elem('test');
+            });
+
+            console.log("결과", tmpResult);
+            return tmpResult;
+        },
+        printErrMsg: function(val) {
+            this.tmpErrMsg = this.checkRules(val).find(element=> element !== true );
+
+            console.log("print============", this.tmpErrMsg);
+            return this.tmpErrMsg;
         }
-    },
+    }
 }
 </script>
 <style lang="scss">
