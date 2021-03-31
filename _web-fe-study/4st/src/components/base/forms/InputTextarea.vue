@@ -1,6 +1,6 @@
 <template>
   <div :class="[`input-${inputType}`, `${styleType}`, `${className}`]">
-    <!-- methods 사용할때 () 까지 적어야한다, 없어도 빼면 시행안됨 -->
+    <!-- methods 사용할때 () 까지 적어야한다, 인자 없어도 빼면 시행안됨 -->
     <label 
         v-if="!isLabelHide()"
         :for="id"
@@ -19,7 +19,7 @@
         - 에러문구 등장효과
      -->
     <!-- printErrMsg 가 렌더링 되어야지 실행이 된다. 그래서 v-if로 못했는데 v-if로 하는 방법이 분명 있겠지.... -->
-    <p v-show="this.tmpErrMsg" class="error"><i></i>{{printErrMsg(rules)}}</p>
+    <p v-show="this.tmpErrMsg" class="error"><i></i>{{printErrMsg()}}</p>
   </div>
 </template>
 <script>
@@ -79,8 +79,8 @@ export default {
         },
         onInputUpdate: function(e) {
             // this.value = e.target.value
-            console.log(e.target.value, e.target.value.length);
-            console.log("this.value", this.value)
+            // console.log(e.target.value, e.target.value.length);
+            // console.log("this.value", this.value)
             // 자식에서 입력된 값을 부모 이벤트로 보냄
             // this.checkRules(value)
             // this.cntText = e.target.value.length
@@ -89,7 +89,7 @@ export default {
             // this.printErrMsg(this.rules);
         },
         checkRules: function() {
-            console.log(this.rules);
+            // console.log(this.rules);
 
             let tmpValue = this.value;
 
@@ -99,11 +99,12 @@ export default {
                 // elem('test');
             });
 
-            console.log("결과", tmpResult);
+            // console.log("결과", tmpResult);
+            // method chainning 하려고 부득이..
             return tmpResult;
         },
-        printErrMsg: function(val) {
-            this.tmpErrMsg = this.checkRules(val).find(element=> element !== true );
+        printErrMsg: function() {
+            this.tmpErrMsg = this.checkRules().find(element=> element !== true );
 
             console.log("print============", this.tmpErrMsg);
             return this.tmpErrMsg;

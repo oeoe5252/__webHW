@@ -26,7 +26,7 @@
         className="mt15" 
         placeholder="텍스트를 입력해주세요">텍스트 {{guideRequest.text}}</input-text>
 
-      <guide-sub-title>
+      <guide-sub-title class="mt15">
         input
         <guide-sub-desc>email</guide-sub-desc>
       </guide-sub-title>
@@ -39,7 +39,7 @@
         inputType="text"
         styleType="type1"
         className="mt15" 
-        placeholder="메일을 입력해봐 한번">이메일 {{guideRequest.email}}</input-text>
+        placeholder="test@dot.com">이메일 {{guideRequest.email}}</input-text>
 
       <guide-sub-title class="mt15">textarea</guide-sub-title>
       <!-- [TODO] 본 input type엔 textarea 없지만 그냥 이름 짓기 구찮아서 넣어준것... -->
@@ -59,12 +59,15 @@
         <!-- [TODO] 체크 기본 설정 옵션 아직 작업 안함 -->
         <input-radio
           v-model="guideRequest.gender"
+          :checked='true'
+          value="g-gender1-1"
           id="g-gender1-1"
           name="g-gender1"
           inputType="radio"
           className="mt15">라디오1{{guideRequest.gender}}</input-radio>
         <input-radio
           v-model="guideRequest.gender"
+          value="g-gender1-2"
           id="g-gender1-2"
           name="g-gender1"
           inputType="radio"
@@ -134,11 +137,15 @@ export default {
   data: () => ({
     // v-model 감시값
     // 데이터 넘길 값
+    // `v-model`은 모든 form 엘리먼트의 초기 `value`와 `checked` 그리고 `selected` 속성을 무시합니다. 항상 Vue 인스턴스 데이터를 원본 소스로 취급합니다. 컴포넌트의 `data` 옵션 안에 있는 JavaScript에서 초기값을 선언해야합니다.
+//     text 와 textarea 태그는 value속성과 input이벤트를 사용합니다.
+// 체크박스들과 라디오버튼들은 checked 속성과 change 이벤트를 사용합니다.
+// Select 태그는 value를 prop으로, change를 이벤트로 사용합니다.
     guideRequest : {
       text: '',
       email: '',
       gender: '',
-      textarea: ''
+      textarea: '',
     },
     // vuetify 복붙 : vuetify에 안적혀있었음 생각도 못했을거
     // 에러는 무진장 뜨네 멋모르고 막하니깐(루프 오류 제일심각)
@@ -148,7 +155,10 @@ export default {
     // 값이 바뀔때마다 해당 rulse 들 순환해줘야함.
     // add them as functions returning true/error message.
     rules: {
-      // 처음에도 노출되는건, v-model에서 첫 값이 undefined 이거나 null 이니깐 그런건가보다(?)
+      // 처음에도 노출되는건, v-model 에서 값이 공백이라서인가
+      // !false = true
+      // !true = false
+      // 왜 이중부정을 하지? 어짜피 이중부정은 원값 아닌가? 뭔 이유가 있으니깐 걔네들이 했겠지?
       text: [
         value => !!value || 'Required.',
         value => (value || '').length <= 4 || '텍스트는 4자까지만',

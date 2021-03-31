@@ -4,7 +4,11 @@
         :id="id"
         :name="name"
         :type="inputType"
-        :readonly="readonly"/>
+        :readonly="readonly"
+        :value="val"
+        :checked="val"
+        @click="$emit('click')"
+        @change="onChangeChecked()"/>
 
     <!-- [TODO]
         - 에러문구는 그룹에서
@@ -19,6 +23,11 @@
 <script>
 export default {
     name: 'InputRadio',
+    computed: {
+        // shouldBeChecked() {
+        //     return this.modelValue == this.value
+        // }
+    },
     props: {
         id: {
             type: String,
@@ -47,9 +56,19 @@ export default {
         readonly: {
             type: Boolean,
             default: false
+        },
+        val: {
+            type: String,
         }
     },
     methods: {
+        onChangeChecked: function() {
+            // 왜 실행만 되고, event는 안받아오지?
+            console.log("changed----------------",this, this.value);
+            // this.$emit('change', this.value);
+            this.$emit('input', this.value)
+            // this.$emit('change', this.value);
+        }
     },
 }
 </script>
